@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { HeroDitheringCard } from "@/components/ui/hero-dithering-card";
+import DetectionServicesCards from "@/components/ui/detection-services-cards";
 import { FileText, Mic, Image, Video, ArrowRight, Zap, Shield, CheckCircle, TrendingUp } from "lucide-react";
 
 export default function Home() {
@@ -95,52 +96,9 @@ export default function Home() {
       {/* Hero Section with Dithering Effect */}
       <HeroDitheringCard />
 
-      {/* Features Section */}
-      <section id="features" className="max-w-7xl mx-auto px-6 pb-24">
-        <div className="text-center mb-16">
-          <h3 className="text-sm font-semibold text-blue-400 uppercase tracking-wider mb-4">Features</h3>
-          <h2 className="text-4xl font-bold text-white mb-4">Detection Services</h2>
-          <p className="text-gray-400 max-w-2xl mx-auto text-lg">
-            Choose a detection type to analyze your content
-          </p>
-        </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          {features.map((feature, index) => {
-            const Icon = feature.icon;
-            return (
-              <Link key={feature.href} href={feature.href}>
-                <div className={`group relative overflow-hidden rounded-3xl bg-gradient-to-br from-gray-900/80 to-gray-800/50 border border-gray-700/50 p-8 h-full cursor-pointer transition-all duration-500 hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/10 hover:-translate-y-2 opacity-0 animate-slide-up stagger-${index + 1}`}>
-                  <div className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-5 transition-opacity duration-500`} />
-
-                  <div className="relative z-10">
-                    <div className="flex items-start justify-between mb-6">
-                      <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center shadow-lg`}>
-                        <Icon className="w-8 h-8 text-white" />
-                      </div>
-                      <span className="text-xs px-4 py-2 bg-white/10 text-white rounded-full font-medium">
-                        {feature.stat}
-                      </span>
-                    </div>
-
-                    <h4 className="text-2xl font-bold text-white mb-4 group-hover:text-blue-300 transition-colors">
-                      {feature.title}
-                    </h4>
-                    <p className="text-gray-400 mb-8 leading-relaxed text-base">
-                      {feature.description}
-                    </p>
-
-                    <div className="flex items-center gap-2 text-blue-400 font-medium group-hover:gap-4 transition-all">
-                      <span>Start Detection</span>
-                      <ArrowRight className="w-5 h-5" />
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
-      </section>
+      {/* Features Section - Detection Services Cards */}
+      <DetectionServicesCards />
 
       {/* Stats Section */}
       <section className="max-w-7xl mx-auto px-6 pb-24">
