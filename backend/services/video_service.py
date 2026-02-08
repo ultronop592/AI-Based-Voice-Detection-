@@ -1,77 +1,196 @@
 """
 Video Deepfake Detection Service
-Uses services/models/video_detector.py (VideoDeepfakeDetector)
+Heuristic + signal-based deepfake risk analyzer
 """
 
 import os
-import sys
 import cv2
 import numpy as np
 import tempfile
 import shutil
 
-# Add backend dir to path for local imports
-BACKEND_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, BACKEND_DIR)
-
 try:
-    from services.models.video_detector import VideoDeepfakeDetector
-    HAS_DETECTOR = True
-except ImportError as e:
-    print(f"⚠️ Video detector import failed: {e}")
-    HAS_DETECTOR = False
+    from moviepy import VideoFileClip
+    HAS_MOVIEPY = True
+except ImportError:
+    try:
+        from moviepy.editor import VideoFileClip
+        HAS_MOVIEPY = True
+    except ImportError:
+        HAS_MOVIEPY = False
+
+
+class VideoDeepfakeDetector:
+    """
+    Heuristic + signal-based deepfake risk analyzer.
+    NOT a trained ML model - uses heuristics.
+    """
+
+    def __init__(self):
+        self.analysis_weights = {
+            "temporal": 0.30,
+            "face": 0.25,
+            "frame": 0.35,
+            "audio": 0.10
+        }
+
+    def extract_frames(self, video_path, num_frames=10):
+        cap = cv2.VideoCapture(video_path)
+        if not cap.isOpened():
+            return None
+
+        total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+        fps = cap.get(cv2.CAP_PROP_FPS)
+        duration = total_frames / fps if fps > 0 else 0
+
+        indices = np.linspace(0, max(total_frames - 1, 0), num_frames, dtype=int)
+        temp_dir = tempfile.mkdtemp()
+        frame_paths = []
+
+        for i, idx in enumerate(indices):
+            cap.set(cv2.CAP_PROP_POS_FRAMES, idx)
+            ret, frame = cap.read()
+            if ret:
+                path = os.path.join(temp_dir, f"frame_{i}.jpg")
+                cv2.imwrite(path, frame)
+                frame_paths.append(path)
+
+        cap.release()
+
+        return {
+            "frames": frame_paths,
+            "temp_dir": temp_dir,
+            "fps": fps,
+            "duration": duration,
+            "total_frames": total_frames
+        }
+
+    def analyze_temporal_consistency(self, frames):
+        diffs = []
+        for i in range(len(frames) - 1):
+            img1 = cv2.imread(frames[i])
+            img2 = cv2.imread(frames[i + 1])
+            if img1 is None or img2 is None:
+                continue
+            img1 = cv2.resize(img1, (256, 256))
+            img2 = cv2.resize(img2, (256, 256))
+            diff = cv2.absdiff(img1, img2)
+            norm_diff = np.mean(diff) / (np.mean(img1) + 1e-5)
+            diffs.append(norm_diff)
+        return float(np.mean(diffs) * 100) if diffs else 0.0
+
+    def analyze_face_consistency(self, frames):
+        face_cascade = cv2.CascadeClassifier(
+            cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
+        )
+        positions = []
+        for path in frames:
+            img = cv2.imread(path)
+            if img is None:
+                continue
+            gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+            faces = face_cascade.detectMultiScale(gray, 1.1, 4)
+            if len(faces) > 0:
+                positions.append(faces[0])
+        if len(positions) < 2:
+            return 0.0
+        pos_arr = np.array(positions)
+        return float(np.var(pos_arr, axis=0).mean())
+
+    def analyze_frame_artifacts(self, frames):
+        scores = []
+        for path in frames:
+            img = cv2.imread(path)
+            if img is None:
+                continue
+            gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+            lap_var = cv2.Laplacian(gray, cv2.CV_64F).var()
+            scores.append(lap_var)
+        return float(np.mean(scores)) if scores else 0.0
+
+    def analyze_audio(self, video_path):
+        if not HAS_MOVIEPY:
+            return 0.0
+        try:
+            clip = VideoFileClip(video_path)
+            result = 0.0 if clip.audio is not None else 20.0
+            clip.close()
+            return result
+        except Exception:
+            return 0.0
+
+    def analyze_video(self, video_path):
+        frame_data = self.extract_frames(video_path)
+        if frame_data is None:
+            return {"success": False, "error": "Could not read video"}
+
+        frames = frame_data["frames"]
+
+        temporal = self.analyze_temporal_consistency(frames)
+        face = self.analyze_face_consistency(frames)
+        frame = self.analyze_frame_artifacts(frames)
+        audio = self.analyze_audio(video_path)
+
+        shutil.rmtree(frame_data["temp_dir"], ignore_errors=True)
+
+        temporal = min(temporal, 100)
+        face = min(face / 10, 100)
+        frame = min(frame / 50, 100)
+
+        final_score = (
+            temporal * self.analysis_weights["temporal"]
+            + face * self.analysis_weights["face"]
+            + frame * self.analysis_weights["frame"]
+            + audio * self.analysis_weights["audio"]
+        )
+
+        label = (
+            "DEEPFAKE" if final_score >= 40 else
+            "SUSPICIOUS" if final_score >= 25 else
+            "LIKELY_REAL"
+        )
+
+        return {
+            "success": True,
+            "label": label,
+            "deepfake_risk_score": round(final_score, 2),
+            "video_info": {
+                "fps": round(frame_data["fps"], 2),
+                "duration": round(frame_data["duration"], 2),
+                "frames_analyzed": len(frames)
+            },
+            "component_scores": {
+                "temporal": round(temporal, 2),
+                "face": round(face, 2),
+                "frame": round(frame, 2),
+                "audio": round(audio, 2)
+            },
+            "disclaimer": "Heuristic analysis. Not a trained ML classifier."
+        }
 
 
 class VideoService:
     """Video deepfake detection using heuristic analysis."""
     
     def __init__(self):
-        if HAS_DETECTOR:
-            self.detector = VideoDeepfakeDetector()
-            print("✅ VideoDeepfakeDetector loaded")
-        else:
-            self.detector = None
-            print("⚠️ Using fallback video analysis")
+        self.detector = VideoDeepfakeDetector()
+        print("✅ VideoDeepfakeDetector loaded")
     
     def predict(self, video_path: str) -> dict:
         """Analyze video for deepfake indicators."""
-        
-        if self.detector:
-            try:
-                result = self.detector.analyze_video(video_path)
-                if result.get("success"):
-                    return {
-                        "prediction": result["label"],
-                        "deepfake_risk_score": result["deepfake_risk_score"],
-                        "confidence": round((100 - abs(result["deepfake_risk_score"] - 50)) / 100, 4),
-                        "video_info": result["video_info"],
-                        "component_scores": result["component_scores"],
-                        "disclaimer": result.get("disclaimer", "Heuristic analysis")
-                    }
-            except Exception as e:
-                print(f"Detector failed: {e}")
-        
-        return self._fallback_analysis(video_path)
-    
-    def _fallback_analysis(self, video_path: str) -> dict:
-        """Simple fallback analysis."""
         try:
-            cap = cv2.VideoCapture(video_path)
-            if not cap.isOpened():
-                return {"error": "Could not open video", "prediction": None}
-            
-            fps = cap.get(cv2.CAP_PROP_FPS)
-            frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-            duration = frames / fps if fps > 0 else 0
-            cap.release()
-            
-            return {
-                "prediction": "UNKNOWN",
-                "deepfake_risk_score": 50,
-                "confidence": 0.5,
-                "video_info": {"fps": round(fps, 2), "duration": round(duration, 2), "frames_analyzed": 0},
-                "disclaimer": "Fallback analysis - detector not available"
-            }
+            result = self.detector.analyze_video(video_path)
+            if result.get("success"):
+                return {
+                    "prediction": result["label"],
+                    "deepfake_risk_score": result["deepfake_risk_score"],
+                    "confidence": round((100 - abs(result["deepfake_risk_score"] - 50)) / 100, 4),
+                    "video_info": result["video_info"],
+                    "component_scores": result["component_scores"],
+                    "disclaimer": result.get("disclaimer", "Heuristic analysis")
+                }
+            else:
+                return {"error": result.get("error", "Analysis failed"), "prediction": None}
         except Exception as e:
             return {"error": str(e), "prediction": None}
     
