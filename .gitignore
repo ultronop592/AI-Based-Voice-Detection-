@@ -1,0 +1,14 @@
+# datasets
+data/
+deepfake_datasets/
+faces/
+faces_unseen/
+unseen_videos/
+
+# cache
+__pycache__/
+*.log
+
+# env
+.venv/
+.env
