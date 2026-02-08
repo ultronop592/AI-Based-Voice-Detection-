@@ -1,0 +1,34 @@
+# AI Fraud & Deepfake Detection - Backend Requirements
+# For Render.com deployment
+
+# Core
+numpy<2.0
+pandas
+Pillow
+
+# Machine Learning
+scikit-learn
+nltk
+joblib
+
+# Deep Learning (CPU-only for Render free tier)
+torch --index-url https://download.pytorch.org/whl/cpu
+torchvision --index-url https://download.pytorch.org/whl/cpu
+
+# Computer Vision
+opencv-python-headless
+
+# Video Processing
+moviepy
+
+# Audio Processing
+SpeechRecognition
+pydub
+
+# FastAPI Backend
+fastapi
+uvicorn[standard]
+python-multipart
+
+# Misc
+tqdm

@@ -1,33 +1,51 @@
-# -------------------------------
-# Core Python & Utilities
-# -------------------------------
+# ============================================
+# AI Fraud & Deepfake Detection
+# Universal Requirements
+# ============================================
+
+# Core Python
 numpy
+pandas
 tqdm
 Pillow
 
-# -------------------------------
-# Computer Vision
-# -------------------------------
-opencv-python
+# Machine Learning
+scikit-learn
+nltk
+joblib
 
-# -------------------------------
-# Video & Audio Processing
-# -------------------------------
-moviepy
-
-# -------------------------------
 # Deep Learning (PyTorch)
-# -------------------------------
 torch
 torchvision
 torchaudio
 
-# -------------------------------
-# Face Detection
-# -------------------------------
+# Computer Vision
+opencv-python
 facenet-pytorch
 
-# -------------------------------
-# Optional / Stability
-# -------------------------------
-scipy
+# Video Processing
+moviepy
+
+# Audio Processing
+SpeechRecognition
+pydub
+pyttsx3
+
+# FastAPI Backend
+fastapi
+uvicorn[standard]
+python-multipart
+
+# ============================================
+# Installation:
+#   pip install -r requirements.txt
+#
+# Run Backend:
+#   cd backend
+#   python -m uvicorn main:app --host 0.0.0.0 --port 8000
+#
+# Run Frontend:
+#   cd frontend
+#   npm install
+#   npm run dev
+# ============================================
