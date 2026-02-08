@@ -1,6 +1,6 @@
 """
 Video Deepfake Detection Service
-Uses models/video_detector.py (VideoDeepfakeDetector)
+Uses services/models/video_detector.py (VideoDeepfakeDetector)
 """
 
 import os
@@ -10,14 +10,15 @@ import numpy as np
 import tempfile
 import shutil
 
-# Add project root to path
-PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-sys.path.insert(0, PROJECT_ROOT)
+# Add backend dir to path for local imports
+BACKEND_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, BACKEND_DIR)
 
 try:
-    from models.video_detector import VideoDeepfakeDetector
+    from services.models.video_detector import VideoDeepfakeDetector
     HAS_DETECTOR = True
-except ImportError:
+except ImportError as e:
+    print(f"⚠️ Video detector import failed: {e}")
     HAS_DETECTOR = False
 
 
