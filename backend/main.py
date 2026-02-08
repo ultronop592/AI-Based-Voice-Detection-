@@ -1,8 +1,6 @@
 """
 AI Fraud & Deepfake Detection - FastAPI Backend
-================================================
-
-Configured for Render.com deployment with environment variables.
+===============================================
 """
 
 import os
@@ -35,7 +33,7 @@ DATASET_PATH = os.environ.get(
 )
 WEIGHTS_PATH = os.environ.get(
     "WEIGHTS_PATH", 
-    os.path.join(PROJECT_ROOT, "models", "weights", "deepfake_cnn.pth")
+    os.path.join(BACKEND_DIR, "weights", "deepfake_cnn.pth")
 )
 
 # Fallback to parent directory Dataset if backend/data doesn't exist

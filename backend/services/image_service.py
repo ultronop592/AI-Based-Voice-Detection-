@@ -26,6 +26,10 @@ class ImageService:
         self.transform = transforms.Compose([
             transforms.Resize((224, 224)),
             transforms.ToTensor(),
+            transforms.Normalize(
+                mean=[0.485, 0.456, 0.406],  # ImageNet mean
+                std=[0.229, 0.224, 0.225]     # ImageNet std
+            ),
         ])
     
     def initialize(self, weights_path: str = None) -> bool:
@@ -39,8 +43,8 @@ class ImageService:
             print(f"📂 Loading trained model from: {path}")
             print(f"   File size: {os.path.getsize(path) / 1024 / 1024:.2f} MB")
             
-            # Create model with same architecture as train.py
-            self.model = models.efficientnet_b0(weights=None)  # Don't load pretrained
+            # Create model with same architecture as train.py (uses pretrained backbone)
+            self.model = models.efficientnet_b0(weights=EfficientNet_B0_Weights.DEFAULT)
             self.model.classifier[1] = nn.Linear(self.model.classifier[1].in_features, 2)
             
             # Load trained weights
@@ -75,7 +79,8 @@ class ImageService:
             # Debug output
             print(f"🔍 Prediction: class={pred}, probs=[{probs[0][0].item():.4f}, {probs[0][1].item():.4f}]")
             
-            # Label mapping: 0=FAKE, 1=REAL (confirmed by user)
+            # Label mapping - based on model behavior and folder naming during training
+            # The model predicts class 0 for FAKE, class 1 for REAL
             label = "DEEPFAKE" if pred == 0 else "REAL"
             
             return {
@@ -83,8 +88,8 @@ class ImageService:
                 "confidence": round(confidence, 4),
                 "class_id": pred,
                 "probabilities": {
-                    "fake": round(probs[0][0].item(), 4),
-                    "real": round(probs[0][1].item(), 4)
+                    "real": round(probs[0][0].item(), 4),
+                    "fake": round(probs[0][1].item(), 4)
                 },
                 "raw_outputs": {
                     "logit_0": round(outputs[0][0].item(), 4),
