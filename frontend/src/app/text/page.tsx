@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { ArrowLeft, FileText, Send, Sparkles } from "lucide-react";
 
 export default function TextPage() {
     const [text, setText] = useState("");
@@ -30,104 +31,134 @@ export default function TextPage() {
         }
     };
 
+    const examples = [
+        "Your bank account is blocked. Share OTP immediately to restore access.",
+        "Hello, this is a reminder about your appointment tomorrow at 3 PM.",
+        "Congratulations! You won $1 million. Send $100 to claim your prize now!"
+    ];
+
     return (
-        <div className="min-h-screen" style={{ background: '#0F1419' }}>
+        <div className="min-h-screen" style={{ background: 'linear-gradient(180deg, #0a0a0f 0%, #0f1419 50%, #0a0a0f 100%)' }}>
             {/* Header */}
             <header className="glass sticky top-0 z-50">
                 <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
-                    <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-                        <div className="w-10 h-10 rounded-xl bg-blue-500 flex items-center justify-center">
-                            <span className="text-xl">🛡️</span>
-                        </div>
-                        <span className="text-white font-semibold">AI Detection Hub</span>
+                    <Link href="/" className="flex items-center gap-3 text-gray-400 hover:text-white transition-colors">
+                        <ArrowLeft className="w-5 h-5" />
+                        <span>Back to Home</span>
                     </Link>
-                    <div className="text-gray-400 text-sm">Text Analysis</div>
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center">
+                            <FileText className="w-5 h-5 text-white" />
+                        </div>
+                        <span className="text-white font-semibold">Text Analysis</span>
+                    </div>
                 </div>
             </header>
 
-            <main className="max-w-4xl mx-auto px-6 py-12">
+            <main className="max-w-4xl mx-auto px-6 py-16">
                 {/* Title */}
-                <div className="text-center mb-10 animate-fade-in">
-                    <div className="w-20 h-20 rounded-2xl bg-blue-500/20 border border-blue-500/30 flex items-center justify-center mx-auto mb-6">
-                        <span className="text-4xl">📝</span>
+                <div className="text-center mb-12 animate-fade-in">
+                    <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-blue-500/30">
+                        <FileText className="w-12 h-12 text-white" />
                     </div>
-                    <h1 className="text-3xl font-bold text-white mb-3">Text Fraud Detection</h1>
-                    <p className="text-gray-400">Analyze call transcripts to detect fraud patterns</p>
+                    <h1 className="text-4xl font-bold text-white mb-4">Text Fraud Detection</h1>
+                    <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+                        Analyze call transcripts or messages to detect fraud patterns using advanced NLP
+                    </p>
                 </div>
 
                 {/* Input Card */}
-                <div className="gradient-border p-6 mb-6 animate-slide-up">
-                    <label className="block text-sm font-medium text-gray-300 mb-3">
-                        Enter call transcript or suspicious text
+                <div className="rounded-3xl bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700/50 p-8 mb-8 animate-slide-up">
+                    <label className="block text-lg font-semibold text-white mb-4">
+                        Enter text to analyze
                     </label>
                     <textarea
-                        className="w-full h-40 px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 transition-colors resize-none"
-                        placeholder="Paste the call transcript here..."
+                        className="w-full h-48 px-6 py-4 bg-gray-800/50 border border-gray-600 rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all resize-none text-lg"
+                        placeholder="Paste the call transcript or suspicious message here..."
                         value={text}
                         onChange={(e) => setText(e.target.value)}
                     />
-                    <div className="flex justify-between items-center mt-4">
-                        <span className="text-sm text-gray-500">{text.length} characters</span>
+                    <div className="flex justify-between items-center mt-6">
+                        <span className="text-gray-500">{text.length} characters</span>
                         <button
                             onClick={handleSubmit}
                             disabled={loading || !text.trim()}
-                            className="btn-primary px-6 py-3 rounded-xl text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="flex items-center gap-3 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 px-8 py-4 rounded-2xl text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50"
                         >
                             {loading ? (
-                                <span className="flex items-center gap-2">
-                                    <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24">
-                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                                    </svg>
+                                <>
+                                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                                     Analyzing...
-                                </span>
+                                </>
                             ) : (
-                                "Analyze Text"
+                                <>
+                                    <Send className="w-5 h-5" />
+                                    Analyze Text
+                                </>
                             )}
                         </button>
                     </div>
                 </div>
 
+                {/* Example Texts */}
+                <div className="mb-8">
+                    <h4 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4 flex items-center gap-2">
+                        <Sparkles className="w-4 h-4" />
+                        Try these examples
+                    </h4>
+                    <div className="grid gap-3">
+                        {examples.map((example, i) => (
+                            <button
+                                key={i}
+                                onClick={() => setText(example)}
+                                className="text-left px-5 py-4 bg-gray-800/50 border border-gray-700/50 text-gray-300 rounded-xl hover:bg-gray-700/50 hover:border-gray-600 transition-all"
+                            >
+                                "{example}"
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
                 {/* Result Card */}
                 {result && (
-                    <div className={`gradient-border p-6 animate-fade-in ${result.prediction === "Fraud Call"
-                            ? "border-red-500/50"
+                    <div className={`rounded-3xl p-8 animate-fade-in ${result.prediction === "Fraud Call"
+                            ? "bg-gradient-to-br from-red-900/30 to-red-800/20 border border-red-500/30"
                             : result.prediction === "Genuine Call"
-                                ? "border-green-500/50"
-                                : "border-gray-700"
+                                ? "bg-gradient-to-br from-green-900/30 to-green-800/20 border border-green-500/30"
+                                : "bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700/50"
                         }`}>
-                        <h3 className="text-lg font-semibold text-white mb-4">Analysis Result</h3>
+                        <h3 className="text-xl font-semibold text-white mb-6">Analysis Result</h3>
 
                         {result.error ? (
-                            <div className="text-red-400">{result.error}</div>
+                            <div className="text-red-400 text-lg">{result.error}</div>
                         ) : (
-                            <div className="space-y-4">
+                            <div className="space-y-6">
                                 {/* Prediction Badge */}
-                                <div className="flex items-center gap-4">
-                                    <span className={`text-5xl ${result.prediction === "Fraud Call" ? "animate-pulse" : ""
+                                <div className="flex items-center gap-6">
+                                    <span className={`text-7xl ${result.prediction === "Fraud Call" ? "animate-pulse" : ""
                                         }`}>
                                         {result.prediction === "Fraud Call" ? "🚨" : "✅"}
                                     </span>
                                     <div>
-                                        <div className={`text-2xl font-bold ${result.prediction === "Fraud Call" ? "text-red-400" : "text-green-400"
+                                        <div className={`text-4xl font-bold ${result.prediction === "Fraud Call" ? "text-red-400" : "text-green-400"
                                             }`}>
                                             {result.prediction}
                                         </div>
-                                        <div className="text-gray-400">
+                                        <div className="text-gray-400 text-lg mt-1">
                                             Confidence: {(result.confidence * 100).toFixed(1)}%
                                         </div>
                                     </div>
                                 </div>
 
                                 {/* Confidence Bar */}
-                                <div>
-                                    <div className="flex justify-between text-sm mb-2">
-                                        <span className="text-gray-400">Detection Confidence</span>
-                                        <span className="text-white">{(result.confidence * 100).toFixed(1)}%</span>
+                                <div className="bg-gray-800/50 rounded-2xl p-6">
+                                    <div className="flex justify-between text-sm mb-3">
+                                        <span className="text-gray-400 font-medium">Detection Confidence</span>
+                                        <span className="text-white font-bold text-lg">{(result.confidence * 100).toFixed(1)}%</span>
                                     </div>
-                                    <div className="h-3 bg-gray-700 rounded-full overflow-hidden">
+                                    <div className="h-4 bg-gray-700 rounded-full overflow-hidden">
                                         <div
-                                            className={`h-full rounded-full transition-all duration-500 ${result.prediction === "Fraud Call" ? "bg-red-500" : "bg-green-500"
+                                            className={`h-full rounded-full transition-all duration-700 ${result.prediction === "Fraud Call" ? "bg-gradient-to-r from-red-500 to-orange-500" : "bg-gradient-to-r from-green-500 to-emerald-500"
                                                 }`}
                                             style={{ width: `${result.confidence * 100}%` }}
                                         />
@@ -137,26 +168,6 @@ export default function TextPage() {
                         )}
                     </div>
                 )}
-
-                {/* Example Texts */}
-                <div className="mt-8">
-                    <h4 className="text-sm font-medium text-gray-400 mb-3">Try these examples:</h4>
-                    <div className="flex flex-wrap gap-2">
-                        {[
-                            "Your bank account is blocked. Share OTP immediately to restore access.",
-                            "Hello, this is a reminder about your appointment tomorrow at 3 PM.",
-                            "You have won a lottery! Send $100 to claim your prize of $1 million."
-                        ].map((example, i) => (
-                            <button
-                                key={i}
-                                onClick={() => setText(example)}
-                                className="text-sm px-3 py-2 bg-gray-800 text-gray-300 rounded-lg hover:bg-gray-700 transition-colors truncate max-w-xs"
-                            >
-                                {example.substring(0, 40)}...
-                            </button>
-                        ))}
-                    </div>
-                </div>
             </main>
         </div>
     );
