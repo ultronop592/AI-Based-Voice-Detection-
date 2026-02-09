@@ -47,7 +47,7 @@ if not os.path.exists(DATASET_PATH):
 # -------------------------------------------------
 text_service = TextService(DATASET_PATH)
 image_service = ImageService(WEIGHTS_PATH)
-video_service = VideoService()
+video_service = VideoService(WEIGHTS_PATH)  # Use same model for video
 audio_service = AudioService()
 
 # -------------------------------------------------
@@ -69,6 +69,7 @@ async def lifespan(app: FastAPI):
     
     if os.path.exists(WEIGHTS_PATH):
         image_service.initialize()
+        video_service.initialize()  # Initialize video service with same model
     else:
         print(f"⚠️ Weights not found: {WEIGHTS_PATH}")
     

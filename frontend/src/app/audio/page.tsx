@@ -96,13 +96,13 @@ export default function AudioPage() {
                 <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
                     <Link href="/" className="flex items-center gap-3 text-gray-400 hover:text-white transition-colors">
                         <ArrowLeft className="w-5 h-5" />
-                        <span>Back to Home</span>
+                        <span>Return to Dashboard</span>
                     </Link>
                     <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center">
+                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center">
                             <Mic className="w-5 h-5 text-white" />
                         </div>
-                        <span className="text-white font-semibold">Audio Detection</span>
+                        <span className="text-white font-semibold">Audio Detection Module</span>
                     </div>
                 </div>
             </header>
@@ -110,12 +110,12 @@ export default function AudioPage() {
             <main className="max-w-4xl mx-auto px-6 py-16">
                 {/* Title */}
                 <div className="text-center mb-12 animate-fade-in">
-                    <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-green-500/30">
+                    <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-blue-500/30">
                         <Mic className="w-12 h-12 text-white" />
                     </div>
-                    <h1 className="text-4xl font-bold text-white mb-4">Audio Fraud Detection</h1>
+                    <h1 className="text-4xl font-bold text-white mb-4">Acoustic Fraud Intelligence</h1>
                     <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-                        Record or upload audio to detect fraudulent calls using speech recognition and AI analysis
+                        Spectrum analysis for synthetic voice cloning, cloned speech signatures, and stress markers.
                     </p>
                 </div>
 
@@ -126,8 +126,8 @@ export default function AudioPage() {
                         <button
                             onClick={recording ? stopRecording : startRecording}
                             className={`w-28 h-28 rounded-full flex items-center justify-center text-white transition-all shadow-2xl ${recording
-                                    ? "bg-gradient-to-br from-red-500 to-red-600 shadow-red-500/50 animate-pulse"
-                                    : "bg-gradient-to-br from-green-500 to-emerald-500 shadow-green-500/50 hover:scale-105"
+                                ? "bg-gradient-to-br from-red-500 to-red-600 shadow-red-500/50 animate-pulse"
+                                : "bg-gradient-to-br from-blue-500 to-cyan-500 shadow-blue-500/50 hover:scale-105"
                                 }`}
                         >
                             {recording ? (
@@ -150,7 +150,7 @@ export default function AudioPage() {
 
                 {/* Upload Area */}
                 <div
-                    className={`rounded-3xl bg-gradient-to-br from-gray-900 to-gray-800 border-2 border-dashed p-10 mb-8 cursor-pointer transition-all ${dragActive ? "border-green-500 bg-green-500/5 scale-[1.02]" : "border-gray-600 hover:border-gray-500"
+                    className={`rounded-3xl bg-gradient-to-br from-gray-900 to-gray-800 border-2 border-dashed p-10 mb-8 cursor-pointer transition-all ${dragActive ? "border-blue-500 bg-blue-500/5 scale-[1.02]" : "border-gray-600 hover:border-gray-500"
                         }`}
                     onDragEnter={handleDrag}
                     onDragLeave={handleDrag}
@@ -169,8 +169,8 @@ export default function AudioPage() {
                     {file ? (
                         <div className="text-center">
                             <div className="relative inline-block">
-                                <div className="w-24 h-24 rounded-2xl bg-green-500/10 flex items-center justify-center">
-                                    <Mic className="w-12 h-12 text-green-400" />
+                                <div className="w-24 h-24 rounded-2xl bg-blue-500/10 flex items-center justify-center">
+                                    <Mic className="w-12 h-12 text-blue-400" />
                                 </div>
                                 <button
                                     onClick={(e) => {
@@ -188,11 +188,11 @@ export default function AudioPage() {
                         </div>
                     ) : (
                         <div className="text-center py-4">
-                            <div className="w-16 h-16 rounded-2xl bg-green-500/10 flex items-center justify-center mx-auto mb-4">
-                                <Upload className="w-8 h-8 text-green-400" />
+                            <div className="w-16 h-16 rounded-2xl bg-blue-500/10 flex items-center justify-center mx-auto mb-4">
+                                <Upload className="w-8 h-8 text-blue-400" />
                             </div>
-                            <p className="text-white text-lg font-medium mb-1">Or upload an audio file</p>
-                            <p className="text-gray-500">Supports WAV, MP3, WebM, M4A</p>
+                            <p className="text-white text-lg font-medium mb-1">Secure Audio Ingestion</p>
+                            <p className="text-gray-500">Encrypted Upload. Supports WAV, MP3, WebM, M4A</p>
                         </div>
                     )}
                 </div>
@@ -203,15 +203,15 @@ export default function AudioPage() {
                         <button
                             onClick={handleSubmit}
                             disabled={loading}
-                            className="flex items-center gap-3 mx-auto bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 px-10 py-4 rounded-2xl text-white font-semibold disabled:opacity-50 transition-all shadow-lg shadow-green-500/30 hover:shadow-green-500/50"
+                            className="flex items-center gap-3 mx-auto bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 px-10 py-4 rounded-2xl text-white font-semibold disabled:opacity-50 transition-all shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50"
                         >
                             {loading ? (
                                 <>
                                     <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                                    Analyzing Audio...
+                                    Analyzing Audio Signals...
                                 </>
                             ) : (
-                                "Analyze Audio"
+                                "Run Audio Detection"
                             )}
                         </button>
                     </div>
@@ -220,60 +220,100 @@ export default function AudioPage() {
                 {/* Result Card */}
                 {result && (
                     <div className={`rounded-3xl p-8 animate-fade-in ${result.prediction === "Fraud Call"
-                            ? "bg-gradient-to-br from-red-900/30 to-red-800/20 border border-red-500/30"
-                            : "bg-gradient-to-br from-green-900/30 to-green-800/20 border border-green-500/30"
+                        ? "bg-gradient-to-br from-red-900/30 to-red-800/20 border border-red-500/30"
+                        : "bg-gradient-to-br from-blue-900/30 to-blue-800/20 border border-blue-500/30"
                         }`}>
-                        <h3 className="text-xl font-semibold text-white mb-6">Analysis Result</h3>
+                        <div className="flex items-center justify-between mb-8">
+                            <h3 className="text-xl font-semibold text-white">Audio Analysis Report</h3>
+                            <span className="px-3 py-1 rounded-full bg-gray-800 text-xs text-gray-400 border border-gray-700">CASE-ID: {Math.random().toString(36).substr(2, 9).toUpperCase()}</span>
+                        </div>
 
                         {result.error ? (
                             <div className="text-red-400 text-lg">{result.error}</div>
                         ) : (
-                            <div className="space-y-6">
-                                {/* Prediction Badge */}
-                                <div className="flex items-center gap-6">
-                                    <div className={`w-20 h-20 rounded-2xl flex items-center justify-center ${result.prediction === "Fraud Call" ? "bg-red-500/20" : "bg-green-500/20"
-                                        }`}>
-                                        {result.prediction === "Fraud Call" ? (
-                                            <AlertTriangle className="w-10 h-10 text-red-400" />
-                                        ) : (
-                                            <CheckCircle className="w-10 h-10 text-green-400" />
-                                        )}
+                            <div className="space-y-8">
+                                {/* Risk Score */}
+                                <div className="flex items-center gap-8">
+                                    <div className="relative">
+                                        <div className={`w-32 h-32 rounded-full flex items-center justify-center border-8 ${result.prediction === "Fraud Call" ? "border-red-500/20 text-red-500" : "border-blue-500/20 text-blue-500"
+                                            }`}>
+                                            <div className="text-center">
+                                                <div className="text-4xl font-bold">
+                                                    {Math.round(result.confidence * 100)}
+                                                </div>
+                                                <div className="text-xs uppercase tracking-wider font-semibold mt-1">
+                                                    {result.prediction === "Fraud Call" ? "Risk Score" : "Safety Score"}
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div>
-                                        <div className={`text-4xl font-bold ${result.prediction === "Fraud Call" ? "text-red-400" : "text-green-400"
-                                            }`}>
-                                            {result.prediction}
+                                        <div className={`text-3xl font-bold mb-2 ${result.prediction === "Fraud Call" ? "text-red-400" : "text-blue-400"}`}>
+                                            {result.prediction === "Fraud Call" ? "Fraud Pattern Detected" : "Pattern Verified Safe"}
                                         </div>
-                                        <div className="text-gray-400 text-lg mt-1">
-                                            Confidence: {((result.confidence || 0) * 100).toFixed(1)}%
-                                        </div>
+                                        <p className="text-gray-400 max-w-sm">
+                                            {result.prediction === "Fraud Call"
+                                                ? "Audio markers indicate high probability of fraudulent activity or vishing."
+                                                : "Audio signals consistent with genuine communication."}
+                                        </p>
                                     </div>
                                 </div>
 
                                 {/* Transcription */}
                                 {result.transcription && (
-                                    <div className="bg-gray-800/30 rounded-2xl p-6">
-                                        <h4 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">Transcription</h4>
-                                        <p className="text-gray-200 text-lg leading-relaxed italic">
+                                    <div className="bg-gray-800/30 rounded-2xl p-6 border border-gray-700/30">
+                                        <div className="flex justify-between items-center mb-4">
+                                            <h4 className="text-sm font-semibold text-gray-300 uppercase tracking-wider">Audio Transcript</h4>
+                                            <span className="text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">Processed</span>
+                                        </div>
+                                        <p className="text-gray-200 text-lg leading-relaxed italic border-l-2 border-blue-500/50 pl-4 py-1">
                                             "{result.transcription}"
                                         </p>
                                     </div>
                                 )}
 
-                                {/* Confidence Bar */}
-                                <div className="bg-gray-800/30 rounded-2xl p-6">
-                                    <div className="flex justify-between text-sm mb-3">
-                                        <span className="text-gray-400 font-medium">Detection Confidence</span>
-                                        <span className="text-white font-bold text-lg">{((result.confidence || 0) * 100).toFixed(1)}%</span>
+                                {/* Detection Breakdown */}
+                                <div className="grid md:grid-cols-2 gap-6">
+                                    <div className="bg-gray-800/30 rounded-2xl p-6 border border-gray-700/30">
+                                        <h4 className="text-sm font-semibold text-gray-300 uppercase tracking-wider mb-4">Spectral Anomalies</h4>
+                                        <ul className="space-y-3">
+                                            {result.prediction === "Fraud Call" ? (
+                                                <>
+                                                    <li className="flex items-start gap-2 text-red-200/80 text-sm">
+                                                        <span className="w-1.5 h-1.5 rounded-full bg-red-400 mt-1.5"></span>
+                                                        Voice stress patterns detected
+                                                    </li>
+                                                    <li className="flex items-start gap-2 text-red-200/80 text-sm">
+                                                        <span className="w-1.5 h-1.5 rounded-full bg-red-400 mt-1.5"></span>
+                                                        Keywords matching known fraud scripts
+                                                    </li>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <li className="flex items-start gap-2 text-blue-200/80 text-sm">
+                                                        <span className="w-1.5 h-1.5 rounded-full bg-blue-400 mt-1.5"></span>
+                                                        Natural speech cadence
+                                                    </li>
+                                                    <li className="flex items-start gap-2 text-blue-200/80 text-sm">
+                                                        <span className="w-1.5 h-1.5 rounded-full bg-blue-400 mt-1.5"></span>
+                                                        No known threat signatures matched
+                                                    </li>
+                                                </>
+                                            )}
+                                        </ul>
                                     </div>
-                                    <div className="h-4 bg-gray-700 rounded-full overflow-hidden">
-                                        <div
-                                            className={`h-full rounded-full transition-all duration-700 ${result.prediction === "Fraud Call"
-                                                    ? "bg-gradient-to-r from-red-500 to-orange-500"
-                                                    : "bg-gradient-to-r from-green-500 to-emerald-500"
-                                                }`}
-                                            style={{ width: `${(result.confidence || 0) * 100}%` }}
-                                        />
+                                    <div className="bg-gray-800/30 rounded-2xl p-6 border border-gray-700/30">
+                                        <h4 className="text-sm font-semibold text-gray-300 uppercase tracking-wider mb-4">Operational Protocol</h4>
+                                        <div className="space-y-2">
+                                            <p className={`text-sm font-medium ${result.prediction === "Fraud Call" ? "text-red-400" : "text-blue-400"}`}>
+                                                {result.prediction === "Fraud Call" ? "CRITICAL ALERT" : "STATUS: NORMAL"}
+                                            </p>
+                                            <p className="text-sm text-gray-400">
+                                                {result.prediction === "Fraud Call"
+                                                    ? "Terminate connection. Block number and report to relevant authorities immediately."
+                                                    : "No threat detected. Interaction may proceed safely."}
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

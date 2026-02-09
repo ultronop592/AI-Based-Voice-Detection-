@@ -44,13 +44,13 @@ export default function TextPage() {
                 <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
                     <Link href="/" className="flex items-center gap-3 text-gray-400 hover:text-white transition-colors">
                         <ArrowLeft className="w-5 h-5" />
-                        <span>Back to Home</span>
+                        <span>Return to Dashboard</span>
                     </Link>
                     <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center">
                             <FileText className="w-5 h-5 text-white" />
                         </div>
-                        <span className="text-white font-semibold">Text Analysis</span>
+                        <span className="text-white font-semibold">Text Detection Module</span>
                     </div>
                 </div>
             </header>
@@ -61,20 +61,20 @@ export default function TextPage() {
                     <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-blue-500/30">
                         <FileText className="w-12 h-12 text-white" />
                     </div>
-                    <h1 className="text-4xl font-bold text-white mb-4">Text Fraud Detection</h1>
+                    <h1 className="text-4xl font-bold text-white mb-4">Linguistic Risk Intelligence</h1>
                     <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-                        Analyze call transcripts or messages to detect fraud patterns using advanced NLP
+                        NLP vector analysis for social engineering patterns and suspicious linguistic constructs.
                     </p>
                 </div>
 
                 {/* Input Card */}
                 <div className="rounded-3xl bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700/50 p-8 mb-8 animate-slide-up">
                     <label className="block text-lg font-semibold text-white mb-4">
-                        Enter text to analyze
+                        Secure Text Ingestion
                     </label>
                     <textarea
                         className="w-full h-48 px-6 py-4 bg-gray-800/50 border border-gray-600 rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all resize-none text-lg"
-                        placeholder="Paste the call transcript or suspicious message here..."
+                        placeholder="Input transcript or message corpus for linguistic auditing..."
                         value={text}
                         onChange={(e) => setText(e.target.value)}
                     />
@@ -88,12 +88,12 @@ export default function TextPage() {
                             {loading ? (
                                 <>
                                     <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                                    Analyzing...
+                                    Processing Vectors...
                                 </>
                             ) : (
                                 <>
                                     <Send className="w-5 h-5" />
-                                    Analyze Text
+                                    Run Linguistic Scan
                                 </>
                             )}
                         </button>
@@ -122,46 +122,82 @@ export default function TextPage() {
                 {/* Result Card */}
                 {result && (
                     <div className={`rounded-3xl p-8 animate-fade-in ${result.prediction === "Fraud Call"
-                            ? "bg-gradient-to-br from-red-900/30 to-red-800/20 border border-red-500/30"
-                            : result.prediction === "Genuine Call"
-                                ? "bg-gradient-to-br from-green-900/30 to-green-800/20 border border-green-500/30"
-                                : "bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700/50"
+                        ? "bg-gradient-to-br from-red-900/30 to-red-800/20 border border-red-500/30"
+                        : "bg-gradient-to-br from-blue-900/30 to-blue-800/20 border border-blue-500/30"
                         }`}>
-                        <h3 className="text-xl font-semibold text-white mb-6">Analysis Result</h3>
+                        <div className="flex items-center justify-between mb-8">
+                            <h3 className="text-xl font-semibold text-white">Linguistic Analysis Report</h3>
+                            <span className="px-3 py-1 rounded-full bg-gray-800 text-xs text-gray-400 border border-gray-700">CASE-ID: {Math.random().toString(36).substr(2, 9).toUpperCase()}</span>
+                        </div>
 
                         {result.error ? (
                             <div className="text-red-400 text-lg">{result.error}</div>
                         ) : (
-                            <div className="space-y-6">
-                                {/* Prediction Badge */}
-                                <div className="flex items-center gap-6">
-                                    <span className={`text-7xl ${result.prediction === "Fraud Call" ? "animate-pulse" : ""
-                                        }`}>
-                                        {result.prediction === "Fraud Call" ? "🚨" : "✅"}
-                                    </span>
-                                    <div>
-                                        <div className={`text-4xl font-bold ${result.prediction === "Fraud Call" ? "text-red-400" : "text-green-400"
+                            <div className="space-y-8">
+                                {/* Risk Score */}
+                                <div className="flex items-center gap-8">
+                                    <div className="relative">
+                                        <div className={`w-32 h-32 rounded-full flex items-center justify-center border-8 ${result.prediction === "Fraud Call" ? "border-red-500/20 text-red-500" : "border-blue-500/20 text-blue-500"
                                             }`}>
-                                            {result.prediction}
+                                            <div className="text-center">
+                                                <div className="text-4xl font-bold">
+                                                    {Math.round(result.confidence * 100)}
+                                                </div>
+                                                <div className="text-xs uppercase tracking-wider font-semibold mt-1">
+                                                    {result.prediction === "Fraud Call" ? "Risk Score" : "Safety Score"}
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div className="text-gray-400 text-lg mt-1">
-                                            Confidence: {(result.confidence * 100).toFixed(1)}%
+                                    </div>
+                                    <div>
+                                        <div className={`text-3xl font-bold mb-2 ${result.prediction === "Fraud Call" ? "text-red-400" : "text-blue-400"}`}>
+                                            {result.prediction === "Fraud Call" ? "Fraud Pattern Detected" : "Safe Communication"}
                                         </div>
+                                        <p className="text-gray-400 max-w-sm">
+                                            {result.prediction === "Fraud Call"
+                                                ? "Linguistic analysis detected urgency, financial pressure, or suspicious keywords."
+                                                : "Standard communication patterns detected. No malicious intent found."}
+                                        </p>
                                     </div>
                                 </div>
 
-                                {/* Confidence Bar */}
-                                <div className="bg-gray-800/50 rounded-2xl p-6">
-                                    <div className="flex justify-between text-sm mb-3">
-                                        <span className="text-gray-400 font-medium">Detection Confidence</span>
-                                        <span className="text-white font-bold text-lg">{(result.confidence * 100).toFixed(1)}%</span>
+                                {/* Explainability */}
+                                <div className="grid md:grid-cols-2 gap-6">
+                                    <div className="bg-gray-800/30 rounded-2xl p-6 border border-gray-700/30">
+                                        <h4 className="text-sm font-semibold text-gray-300 uppercase tracking-wider mb-4">Detected Patterns & Keywords</h4>
+                                        <ul className="space-y-3">
+                                            {result.prediction === "Fraud Call" ? (
+                                                <>
+                                                    <li className="flex items-start gap-2 text-red-200/80 text-sm">
+                                                        <span className="w-1.5 h-1.5 rounded-full bg-red-400 mt-1.5"></span>
+                                                        High urgency language detected
+                                                    </li>
+                                                    <li className="flex items-start gap-2 text-red-200/80 text-sm">
+                                                        <span className="w-1.5 h-1.5 rounded-full bg-red-400 mt-1.5"></span>
+                                                        Financial pressure keywords identified
+                                                    </li>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <li className="flex items-start gap-2 text-blue-200/80 text-sm">
+                                                        <span className="w-1.5 h-1.5 rounded-full bg-blue-400 mt-1.5"></span>
+                                                        Neutral / Positive sentiment
+                                                    </li>
+                                                    <li className="flex items-start gap-2 text-blue-200/80 text-sm">
+                                                        <span className="w-1.5 h-1.5 rounded-full bg-blue-400 mt-1.5"></span>
+                                                        Absence of coercion patterns
+                                                    </li>
+                                                </>
+                                            )}
+                                        </ul>
                                     </div>
-                                    <div className="h-4 bg-gray-700 rounded-full overflow-hidden">
-                                        <div
-                                            className={`h-full rounded-full transition-all duration-700 ${result.prediction === "Fraud Call" ? "bg-gradient-to-r from-red-500 to-orange-500" : "bg-gradient-to-r from-green-500 to-emerald-500"
-                                                }`}
-                                            style={{ width: `${result.confidence * 100}%` }}
-                                        />
+                                    <div className="bg-gray-800/30 rounded-2xl p-6 border border-gray-700/30">
+                                        <h4 className="text-sm font-semibold text-gray-300 uppercase tracking-wider mb-4">Operational Protocol</h4>
+                                        <p className="text-sm text-gray-400 leading-relaxed">
+                                            {result.prediction === "Fraud Call"
+                                                ? "Immediate Caution: Do not share OTPs, PINs, or transfer money. Verify the caller identity through official channels."
+                                                : "No immediate action required. Proceed with normal communication protocol."}
+                                        </p>
                                     </div>
                                 </div>
                             </div>

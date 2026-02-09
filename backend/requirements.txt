@@ -2,7 +2,7 @@
 # For Render.com deployment
 
 # Core
-numpy<2.0
+numpy>=1.26.0
 pandas
 Pillow
 
